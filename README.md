@@ -1,118 +1,125 @@
 <h1 align="center">
-<a href="https://github.com/Shmulik-Kravitz/jewish-date"><img src="assets/jewish-date.svg" alt="Jewish Date" /></a>
+<a href="https://github.com/pinc444/jewish-date"><img src="assets/jewish-date.svg" alt="Jewish Date" /></a>
 </h1>
 
-<p align="center">Jewish Date is a fast and modern <b>2kb</b> alternative to hebcal with an MIT license.</p>
+<p align="center">Jewish Date is a fast and lightweight alternative to hebcal with an MIT license.</p>
 <p align="center">
-  <a href="https://www.npmjs.com/package/jewish-date">
-    <img src="https://img.shields.io/npm/v/jewish-date.svg" alt="npm version" />
-  </a>
-  <a href="https://unpkg.com/jewish-date@*/dist/index.js">
-    <img src="https://img.shields.io/badge/Size-2%20kb-success?style=flat" alt="Gzip Size" />
-  </a>
-  <a href="https://github.com/Shmulik-Kravitz/jewish-date/blob/master/LICENSE">
+  <a href="https://github.com/pinc444/jewish-date/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
   </a>
-  <img src="https://github.com/Shmulik-Kravitz/jewish-date/actions/workflows/main.yml/badge.svg" alt="Build Status" />
-  <img src="https://img.shields.io/badge/Code%20Coverage-100%25-success?style=flat" alt="Code Coverage" />
+  <img src="https://github.com/pinc444/jewish-date/actions/workflows/main.yml/badge.svg" alt="Build Status" />
 </p>
 
-> Jewish Date is a fast and modern 2kB JavaScript library that provides a simple and efficient Gregorian-to-Hebrew and vice versa date converter. With an MIT license and seamless compatibility with all browsers, node.js, and TypeScript, Jewish Date is a reliable and efficient date converter that can help you convert dates between the Hebrew and Gregorian calendars with ease.
+> Jewish Date is a pure Haxe library that provides Gregorian-to-Hebrew and Hebrew-to-Gregorian date conversion. It compiles to JavaScript and has zero runtime dependencies.
 
-
-- 📦 2kb mini library (minified & gzip)
+- 📦 Pure Haxe — no external dependencies
 - 📜 MIT License
 - 🔧 Easy to use
-- 💻 Seamless compatibility with both Node.js and the browser
+- 💻 Compiles to JavaScript (and other Haxe targets)
 
 # Getting Started
 
 ## Installation
 
+Install via haxelib:
+
 ```console
-yarn add jewish-date
+haxelib install jewish-date
 ```
 
-Or with npm
+Or use as a Git dependency in your `haxelib.json`:
 
-```console
-npm install jewish-date --save
+```json
+{
+  "dependencies": {
+    "jewish-date": "git:https://github.com/pinc444/jewish-date.git"
+  }
+}
 ```
 
 ## Usage
 
-### TypeScript & ES6 example
+### Haxe Example
 
-```js
-import {
-  toJewishDate,
-  formatJewishDate,
-  toHebrewJewishDate,
-  formatJewishDateInHebrew,
-  toGregorianDate,
-  JewishMonth,
-} from "jewish-date";
+```haxe
+import jewishdate.JewishDateCalc;
+import jewishdate.JewishDateHebrew;
+import jewishdate.Types;
 
-const date = new Date(2023, 4, 9); // the month is 0-indexed (4 = May)
-const jewishDate = toJewishDate(date);
-console.log(jewishDate); // { year: 5783, monthName: "Iyyar", month: 8, day: 18 }
+class Main {
+    static function main() {
+        // Convert Gregorian date to Jewish date
+        // Parameters: year, month (1-indexed), day
+        var jewishDate = JewishDateCalc.toJewishDateFromParts(2023, 5, 9);
+        // jewishDate = { year: 5783, monthName: Iyyar, month: 8, day: 18 }
 
-const jewishDateInEnglish = formatJewishDate(jewishDate);
-console.log(jewishDateInEnglish); // 18 Iyyar 5783
+        // Format in English
+        var english = JewishDateCalc.formatJewishDate(jewishDate);
+        trace(english); // "18 Iyyar 5783"
 
-// With custom format pattern (similar to date-fns)
-const formatted = formatJewishDate(jewishDate, "dd/MM/yyyy");
-console.log(formatted); // 18/08/5783
+        // Format with custom pattern
+        var formatted = JewishDateCalc.formatJewishDate(jewishDate, "dd/MM/yyyy");
+        trace(formatted); // "18/08/5783"
 
-const jewishDateInHebrew = toHebrewJewishDate(jewishDate);
-console.log(jewishDateInHebrew); // { day: "י״ח", monthName: "אייר", year: "התשפ״ג" }
+        // Convert to Hebrew
+        var hebrewDate = JewishDateHebrew.toHebrewJewishDate(jewishDate);
+        // hebrewDate = { day: "י״ח", monthName: "אייר", year: "התשפ״ג" }
 
-const jewishDateInHebrewStr = formatJewishDateInHebrew(jewishDate);
-console.log(jewishDateInHebrewStr); // י״ח אייר התשפ״ג
+        // Format in Hebrew
+        var hebrewStr = JewishDateHebrew.formatJewishDateInHebrew(jewishDate);
+        trace(hebrewStr); // "י״ח אייר התשפ״ג"
 
-// With custom format pattern in Hebrew (gematria)
-const formattedHebrew = formatJewishDateInHebrew(jewishDate, "D/MM/YY");
-console.log(formattedHebrew); // י״ח/02/פ״ג
+        // Format in Hebrew with custom pattern (gematria)
+        var hebrewFormatted = JewishDateHebrew.formatJewishDateInHebrew(jewishDate, "D/MM/YY");
+        trace(hebrewFormatted); // "י״ח/02/פ״ג"
 
-const date2 = toGregorianDate({
-  year: 5783,
-  monthName: JewishMonth.Iyyar,
-  day: 18,
-});
-console.log(date2); // Tue May 09 2023 00:00:00 GMT+0300 (Israel Daylight Time)
+        // Convert back to Gregorian
+        var gregParts = JewishDateCalc.toGregorianDateParts({
+            year: 5783,
+            monthName: Iyyar,
+            day: 18
+        });
+        trace(gregParts); // [2023, 5, 9]
+    }
+}
 ```
 
-#### For ES5
+### Building to JavaScript
 
-Replace
+Add to your `.hxml` build file:
 
-```js
-import {
-  toJewishDate,
-  formatJewishDate,
-  toHebrewJewishDate,
-  formatJewishDateInHebrew,
-  toGregorianDate,
-  JewishMonth,
-} from "jewish-date";
+```
+-lib jewish-date
+-cp src
+-main Main
+-js output.js
 ```
 
-With
+## API Reference
 
-```js
-const {
-  toJewishDate,
-  formatJewishDate,
-  toHebrewJewishDate,
-  formatJewishDateInHebrew,
-  toGregorianDate,
-  JewishMonth,
-} = require("jewish-date");
-```
+### JewishDateCalc
+
+| Function | Description |
+| --- | --- |
+| `toJewishDateFromParts(year, month, day)` | Convert Gregorian date parts (month is 1-indexed) to a Jewish date |
+| `toGregorianDateParts(jewishDate)` | Convert a Jewish date to Gregorian date parts `[year, month, day]` |
+| `formatJewishDate(jewishDate, ?pattern)` | Format a Jewish date as an English string |
+| `isLeapYear(year)` | Check if a Jewish year is a leap year |
+| `getJewishMonthsInOrder(year)` | Get the month names in order for a given year |
+| `calcDaysInMonth(year, month)` | Get the number of days in a Jewish month |
+
+### JewishDateHebrew
+
+| Function | Description |
+| --- | --- |
+| `toHebrewJewishDate(jewishDate)` | Convert a Jewish date to Hebrew strings |
+| `formatJewishDateInHebrew(jewishDate, ?pattern)` | Format a Jewish date as a Hebrew string |
+| `convertNumberToHebrew(num)` | Convert a number to Hebrew gematria |
+| `getJewishMonthInHebrew(month)` | Get the Hebrew name of a Jewish month |
 
 ## Format Patterns
 
-Both `formatJewishDate` and `formatJewishDateInHebrew` accept an optional pattern string as the second argument. The pattern uses tokens similar to [date-fns](https://date-fns.org/docs/format).
+Both `formatJewishDate` and `formatJewishDateInHebrew` accept an optional pattern string. The pattern uses tokens similar to [date-fns](https://date-fns.org/docs/format).
 
 ### Supported Tokens
 
@@ -129,24 +136,24 @@ Both `formatJewishDate` and `formatJewishDateInHebrew` accept an optional patter
 | `yyyy` | Year full (numeric)      | 5783               | 5783                       |
 | `YYYY` | Year full (gematria)     | 5783               | התשפ״ג                     |
 
-### Examples
+## Building from Source
 
-```js
-const jewishDate = toJewishDate(new Date(2023, 4, 9)); // 18 Iyyar 5783
+### Prerequisites
 
-// English formatting (default: "d MMMM yyyy")
-formatJewishDate(jewishDate);                 // "18 Iyyar 5783"
-formatJewishDate(jewishDate, "dd/MM/yyyy");   // "18/08/5783"
-formatJewishDate(jewishDate, "MMMM d, yyyy"); // "Iyyar 18, 5783"
-formatJewishDate(jewishDate, "yyyy-MM-dd");   // "5783-08-18"
+- [Haxe](https://haxe.org/download/) 4.x or later
 
-// Hebrew formatting (default: "D MMMM YYYY")
-formatJewishDateInHebrew(jewishDate);                 // "י״ח אייר התשפ״ג"
-formatJewishDateInHebrew(jewishDate, "D MMMM YYYY");  // "י״ח אייר התשפ״ג"
-formatJewishDateInHebrew(jewishDate, "dd/MM/yyyy");   // "18/08/5783" (numeric)
-formatJewishDateInHebrew(jewishDate, "d MMMM yyyy");  // "18 אייר 5783" (mixed)
+### Build
+
+```console
+haxe build.hxml
+```
+
+### Run Tests
+
+```console
+haxe test.hxml && node dist/test.js
 ```
 
 # License
 
-Jewish Date is licensed under a [MIT License](https://github.com/Shmulik-Kravitz/jewish-date/blob/master/LICENSE).
+Jewish Date is licensed under a [MIT License](./LICENSE).

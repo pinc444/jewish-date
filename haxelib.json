@@ -1,0 +1,11 @@
+{
+  "name": "jewish-date",
+  "url": "https://github.com/pinc444/jewish-date",
+  "license": "MIT",
+  "tags": ["jewish", "hebrew", "date", "luach", "calendar", "convert", "hdate", "hebcal", "hcal"],
+  "description": "Converts Gregorian dates to Hebrew dates and vice versa. Pure Haxe implementation targeting JavaScript.",
+  "version": "3.0.0",
+  "classPath": "src/",
+  "dependencies": {},
+  "releasenote": "Converted to pure Haxe/JS haxelib"
+}
