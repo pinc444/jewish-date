@@ -1,0 +1,4 @@
+-cp src
+--macro include('jewishdate')
+-js dist/jewish-date.js
+-D js-es=6

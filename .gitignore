@@ -1,20 +1,21 @@
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-node_modules
-.history/
-
+# Build output
 dist/
 lib/
 
-coverage
-config/static/out.css
-config/static/out.css.map
-config/static/out.js
-config/static/out.js.map
-config/tsconfig.tsbuildinfo
+# Haxe
+.haxelib/
+
+# IDE
+.vscode/
+.idea/
+.history/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for running tests)
+node_modules/
+
+# Coverage
+coverage/
